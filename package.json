@@ -1,0 +1,25 @@
+{
+  "name": "@nelreina/rest-client",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "dev": "nodemon --watch src src/example/index.js"
+  },
+  "author": "@nelreina",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nelreina/rest-client.git"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.16"
+  }
+}
