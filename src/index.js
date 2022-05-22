@@ -1,6 +1,6 @@
-import axios from "axios";
+const axios = require("axios");
 
-export default (API) => {
+module.exports = (API) => {
   const request = async (
     path,
     method = "GET",
