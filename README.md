@@ -6,8 +6,8 @@ A simple rest client , abstraction of axios
 
 ```javascript
 import RestClient from "@nelreina/rest-client";
-const jsonService = await RestClient("https://jsonplaceholder.typicode.com");
-const anotherService = await RestClient("http://localhost:1234");
+const jsonService = RestClient("https://jsonplaceholder.typicode.com");
+const anotherService = RestClient("http://localhost:1234");
 
 const data = await jsonService.get("/todos/1");
 
