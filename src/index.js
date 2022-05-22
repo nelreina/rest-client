@@ -63,5 +63,39 @@ module.exports = (API) => {
   const post = async (path, data, token) =>
     await request(path, "POST", data, token);
 
-  return { request, get, post };
+  const pollForValue = (path, field, options) =>
+    new Promise((resolve, reject) => {
+      let count_attempts = 1;
+      const max_attempts = options?.max_attempts || 60;
+      const interval = (options?.interval || 0.5) * 1000;
+      const returnAll = options?.returnAll || false;
+      const setLoading = options?.setLoading || function () {};
+
+      const pollInterval = setInterval(async () => {
+        try {
+          setLoading(true);
+          const data = await get(path);
+          if (data[field] === null && count_attempts < max_attempts) {
+            // Continue polling
+            ++count_attempts;
+          } else {
+            if (count_attempts === max_attempts) {
+              setLoading(false);
+              clearInterval(pollInterval);
+              return reject("Took to long for a response!");
+            } else {
+              resolve(returnAll ? data : data[field]);
+              setLoading(false);
+              clearInterval(pollInterval);
+            }
+          }
+        } catch (error) {
+          clearInterval(pollInterval);
+          setLoading(false);
+          return reject(error.message);
+        }
+      }, interval);
+    });
+
+  return { request, get, post, pollForValue };
 };
