@@ -62,6 +62,8 @@ module.exports = (API) => {
   const get = async (path, token) => await request(path, (token = token));
   const post = async (path, data, token) =>
     await request(path, "POST", data, token);
+  const put = async (path, data, token) =>
+    await request(path, "PUT", data, token);
 
   const pollForValue = (path, field, options) =>
     new Promise((resolve, reject) => {
@@ -97,5 +99,5 @@ module.exports = (API) => {
       }, interval);
     });
 
-  return { request, get, post, pollForValue };
+  return { request, get, post, put, pollForValue };
 };
