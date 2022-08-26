@@ -1,7 +1,7 @@
 import axios from "axios";
 import { buildXML } from "@nelreina/xml-utils";
 
-export default (API, mime = "json") => {
+export default (API, mime = "json", auth = null) => {
   const request = async (
     path,
     method = "GET",
@@ -12,6 +12,7 @@ export default (API, mime = "json") => {
     const options = {
       method,
       url,
+      auth,
       headers: {
         "Content-Type": `application/${mime}`,
         Accept: `application/${mime}`,
