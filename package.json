@@ -1,13 +1,16 @@
 {
   "name": "@nelreina/rest-client",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "src/index.js",
   "type": "module",
   "files": [
     "src"
   ],
   "scripts": {
-    "dev": "nodemon --watch src src/example/index.js"
+    "dev:json": "nodemon --watch src src/example/json.js",
+    "dev:xml": "nodemon --watch src src/example/xml.js",
+    "dev:jwt": "nodemon --watch src src/example/jwt.js",
+    "dev": "run-p dev:json dev:xml dev:jwt"
   },
   "author": "@nelreina",
   "license": "ISC",
@@ -16,10 +19,12 @@
     "url": "https://github.com/nelreina/rest-client.git"
   },
   "dependencies": {
+    "@nelreina/xml-utils": "^1.0.0",
     "axios": "^0.27.2"
   },
   "devDependencies": {
     "dotenv": "^16.0.1",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "npm-run-all": "^4.1.5"
   }
 }

@@ -1,12 +1,12 @@
 import axios from "axios";
+import { buildXML } from "@nelreina/xml-utils";
 
-export default (API) => {
+export default (API, mime = "json") => {
   const request = async (
     path,
     method = "GET",
     optionalData = null,
-    token = null,
-    mime = "json"
+    token = null
   ) => {
     const url = `${API}${path}`;
     const options = {
@@ -28,6 +28,10 @@ export default (API) => {
         case "json":
           options.data = body;
           break;
+        case "xml":
+          body = await buildXML(optionalData);
+          options.data = body;
+          break;
 
         default:
           break;
@@ -38,15 +42,18 @@ export default (API) => {
       switch (err.response?.status) {
         case 400:
           badRequestData = err.response?.data;
-          return { status: 400 };
         case 401:
-          console.log("LOG: ~ rest-client.js: ~ 401");
           throw new Error("Unauthorized");
         case 404:
-          console.log("LOG: ~ rest-client.js ~ 404");
           throw new Error(`${err.config.url} not found`);
         default:
-          throw new Error(JSON.stringify(err.response?.data));
+          throw new Error(
+            JSON.stringify(
+              `Response Code: ${err.response?.status} - ${JSON.stringify(
+                err.response?.data
+              )}`
+            )
+          );
       }
     });
 
@@ -59,7 +66,7 @@ export default (API) => {
     }
   };
 
-  const get = async (path, token) => await request(path, (token = token));
+  const get = async (path, token) => await request(path, "GET", null, token);
   const post = async (path, data, token) =>
     await request(path, "POST", data, token);
   const put = async (path, data, token) =>
