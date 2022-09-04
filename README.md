@@ -2,14 +2,39 @@
 
 A simple rest client , abstraction of axios
 
+## Migration from 1
+
+### Version 1
+
+```js
+const jsonService = RestClient("https://jsonplaceholder.typicode.com");
+```
+
+### Version 2 is Class Based
+
+```js
+const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
+```
+
 ## Usage / Example
 
 ```javascript
 import RestClient from "@nelreina/rest-client";
-const jsonService = RestClient("https://jsonplaceholder.typicode.com");
-const anotherService = RestClient("http://localhost:1234");
+const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
+const anotherService = new RestClient("http://localhost:1234", "xml");
 
-const data = await jsonService.get("/todos/1");
+// Basic Authorization
+const auth = { username: "", password: "" };
+const authService = new RestClient("http://localhost:1234", null, auth);
 
-const data2 = await anotherService.post("/test", { message: "post me" });
+// Call the api
+try {
+  // Get route
+  const data = await jsonService.get("/todos/1");
+
+  // POST route
+  const data2 = await anotherService.post("/test", { message: "post me" });
+} catch (error) {
+  console.log(error.message);
+}
 ```
