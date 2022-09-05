@@ -1,12 +1,13 @@
 {
   "name": "@nelreina/rest-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "src/index.js",
   "type": "module",
   "files": [
     "src"
   ],
   "scripts": {
+    "dev:errors": "nodemon --watch src src/example/errors.js",
     "dev:json": "nodemon --watch src src/example/json.js",
     "dev:xml": "nodemon --watch src src/example/xml.js",
     "dev:jwt": "nodemon --watch src src/example/strapi-login.js",

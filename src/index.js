@@ -56,10 +56,14 @@ export class RestClient {
       }
     }
     let badRequestData;
-    const { status, data } = await this.client(options).catch((err) => {
-      switch (err.response?.status) {
+    let status;
+    const response = await this.client(options).catch((err) => {
+      // console.log(JSON.stringify(err, null, 2));
+      status = err.response.status;
+      switch (status) {
         case 400:
           badRequestData = err.response?.data;
+          break;
         case 401:
           throw new Error("Unauthorized");
         case 404:
@@ -74,9 +78,10 @@ export class RestClient {
           );
       }
     });
+    status = status ? status : response.status;
 
     if (status >= 200 && status < 210) {
-      return data;
+      return response.data;
     } else if (status === 400) {
       return badRequestData;
     } else {

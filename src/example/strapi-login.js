@@ -1,17 +1,17 @@
 import "dotenv/config";
 
 import { RestClient } from "../index.js";
-const JWT_API = process.env["JWT_API"];
+const STRAPI_API = process.env["STRAPI_API"];
 const JWT_USERNAME = process.env["JWT_USERNAME"];
 const JWT_PASSWORD = process.env["JWT_PASSWORD"];
 
-if (!JWT_API) {
-  console.error("JWT_API is not defined");
+if (!STRAPI_API) {
+  console.error("STRAPI_API is not defined");
 }
 
 try {
-  console.log("LOG:  ~ file: index.js ~ line 12 ~ JWT_API", JWT_API);
-  const jwtService = new RestClient(JWT_API, { isStrapi: true });
+  console.log("LOG:  ~ file: index.js ~ line 12 ~ STRAPI_API", STRAPI_API);
+  const jwtService = new RestClient(STRAPI_API, { isStrapi: true });
   const jwt = await jwtService.strapiLogin(JWT_USERNAME, JWT_PASSWORD);
   console.log("LOG:  ~ file: index.js ~ line 23 ~ jwt token", jwt);
   const data = await jwtService.get("/costumers", true);
