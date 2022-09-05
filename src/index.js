@@ -1,31 +1,48 @@
 import axios from "axios";
 import { buildXML } from "@nelreina/xml-utils";
 
-export default (API, mime = "json", auth = null) => {
-  const request = async (
-    path,
-    method = "GET",
-    optionalData = null,
-    token = null
-  ) => {
-    const url = `${API}${path}`;
-    const options = {
-      method,
-      url,
-      auth,
+const continueCheckingValue = (data, field, values) => {
+  if (values === "any" && (data[field] !== undefined || data[field] !== null)) {
+    return false;
+  }
+  return !("" + values).includes("" + data[field]);
+};
+
+export class RestClient {
+  constructor(API, options = {}) {
+    this.strapi = options.isStrapi || false;
+    this.mime = options.mime || "json";
+    this.headers = {
+      baseURL: API,
+      auth: options.auth || null,
       headers: {
-        "Content-Type": `application/${mime}`,
-        Accept: `application/${mime}`,
+        "Content-Type": `application/${this.mime}`,
+        Accept: `application/${this.mime}`,
       },
     };
+    this.client = axios.create(this.headers);
+  }
 
-    if (token) {
-      options.headers["Authorization"] = `Bearer ${token}`;
+  async request(path, method = "GET", optionalData = null, token = false) {
+    const url = `${path}`;
+    const options = { method, url, headers: { ...this.headers } };
+
+    if (this.strapi && token) {
+      if (!this.strapiToken) {
+        throw new Error(
+          "No token provided! Please login first by calling strapiLogin."
+        );
+      }
+      options.headers["Authorization"] = `Bearer ${this.strapiToken}`;
+    } else {
+      if (token) {
+        options.headers["Authorization"] = `Bearer ${token}`;
+      }
     }
 
     if (optionalData) {
       let body = optionalData;
-      switch (mime) {
+      switch (this.mime) {
         case "json":
           options.data = body;
           break;
@@ -39,7 +56,7 @@ export default (API, mime = "json", auth = null) => {
       }
     }
     let badRequestData;
-    const { status, data } = await axios(options).catch((err) => {
+    const { status, data } = await this.client(options).catch((err) => {
       switch (err.response?.status) {
         case 400:
           badRequestData = err.response?.data;
@@ -65,34 +82,65 @@ export default (API, mime = "json", auth = null) => {
     } else {
       throw Error(`Status ${status}`);
     }
-  };
+  }
 
-  const get = async (path, token) => await request(path, "GET", null, token);
-  const post = async (path, data, token) =>
-    await request(path, "POST", data, token);
-  const put = async (path, data, token) =>
-    await request(path, "PUT", data, token);
+  async get(path, token) {
+    return await this.request(path, "GET", null, token);
+  }
 
-  const pollForValue = (path, field, options) =>
+  async post(path, data, token) {
+    return await this.request(path, "POST", data, token);
+  }
+  async put(path, data, token) {
+    return await this.request(path, "PUT", data, token);
+  }
+
+  async delete(path, token) {
+    return await this.request(path, "DELETE", null, token);
+  }
+
+  async strapiLogin(identifier, password) {
+    try {
+      const { jwt } = await this.post("/auth/local", { identifier, password });
+      this.strapiToken = jwt;
+      return jwt;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  pollForValue = (path, field, options = {}, token = false) =>
     new Promise((resolve, reject) => {
       let count_attempts = 1;
       const max_attempts = options?.max_attempts || 60;
       const interval = (options?.interval || 0.5) * 1000;
       const returnAll = options?.returnAll || false;
       const setLoading = options?.setLoading || function () {};
-
+      const values = options?.values || "any";
       const pollInterval = setInterval(async () => {
         try {
           setLoading(true);
-          const data = await get(path);
-          if (data[field] === null && count_attempts < max_attempts) {
+          const data = await this.get(path, token);
+          if (Array.isArray(data)) {
+            throw new Error(
+              "Response data is an array. Array is not supported."
+            );
+          }
+          if (typeof data !== "object") {
+            throw new Error("Response data is not an object.");
+          }
+
+          if (
+            continueCheckingValue(data, field, values) &&
+            count_attempts < max_attempts
+          ) {
             // Continue polling
             ++count_attempts;
           } else {
             if (count_attempts === max_attempts) {
               setLoading(false);
               clearInterval(pollInterval);
-              return reject("Took to long for a response!");
+              throw new Error("Max attempts is reached !");
             } else {
               resolve(returnAll ? data : data[field]);
               setLoading(false);
@@ -102,10 +150,8 @@ export default (API, mime = "json", auth = null) => {
         } catch (error) {
           clearInterval(pollInterval);
           setLoading(false);
-          return reject(error.message);
+          return reject(error);
         }
       }, interval);
     });
-
-  return { request, get, post, put, pollForValue };
-};
+}

@@ -9,7 +9,8 @@
   "scripts": {
     "dev:json": "nodemon --watch src src/example/json.js",
     "dev:xml": "nodemon --watch src src/example/xml.js",
-    "dev:jwt": "nodemon --watch src src/example/jwt.js",
+    "dev:jwt": "nodemon --watch src src/example/strapi-login.js",
+    "dev:poll": "nodemon --watch src src/example/poll-for-value.js",
     "dev": "run-p dev:json dev:xml dev:jwt"
   },
   "author": "@nelreina",
