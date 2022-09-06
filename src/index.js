@@ -11,10 +11,10 @@ const continueCheckingValue = (data, field, values) => {
 export class RestClient {
   constructor(API, options = {}) {
     this.strapi = options.isStrapi || false;
-    this.mime = options.mime || "json";
+    this.mime = options.mimetype || "json";
     this.headers = {
       baseURL: API,
-      auth: options.auth || null,
+      auth: options.basicAuth || null,
       headers: {
         "Content-Type": `application/${this.mime}`,
         Accept: `application/${this.mime}`,

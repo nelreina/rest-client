@@ -13,7 +13,11 @@ const jsonService = RestClient("https://jsonplaceholder.typicode.com");
 ### Version 2 is Class Based
 
 ```js
-const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
+const options = {};
+const jsonService = new RestClient(
+  "https://jsonplaceholder.typicode.com",
+  options
+);
 ```
 
 ## Usage / Example
@@ -21,11 +25,11 @@ const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
 ```javascript
 import { RestClient } from "@nelreina/rest-client";
 const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
-const anotherService = new RestClient("http://localhost:1234", "xml");
+const xmlService = new RestClient("http://localhost:1234", { mimetype: "xml" });
 
 // Basic Authorization
-const auth = { username: "", password: "" };
-const authService = new RestClient("http://localhost:1234", null, auth);
+const basicAuth = { username: "", password: "" };
+const authService = new RestClient("http://localhost:1234", { basicAuth });
 
 // Call the api
 try {
@@ -33,8 +37,15 @@ try {
   const data = await jsonService.get("/todos/1");
 
   // POST route
-  const data2 = await anotherService.post("/test", { message: "post me" });
+  const data2 = await xmlService.post("/test", { message: "post me" });
 } catch (error) {
   console.log(error.message);
 }
 ```
+
+## Options
+
+| field     | default | value                            |
+| --------- | ------- | -------------------------------- |
+| mimetype  | json    | 'xml' or 'json'                  |
+| basicAuth | null    | {'username': '', 'password': ''} |
