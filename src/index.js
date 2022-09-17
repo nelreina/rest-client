@@ -14,11 +14,8 @@ export default class RestClient {
     this.mime = options.mimetype || "json";
     this.api = API;
     this.headers = {
-      // baseURL: API,
-      headers: {
-        "Content-Type": `application/${this.mime}`,
-        Accept: `application/${this.mime}`,
-      },
+      "Content-Type": `application/${this.mime}`,
+      Accept: `application/${this.mime}`,
     };
     if (options.basicAuth) {
       this.headers.auth = options.basicAuth;
