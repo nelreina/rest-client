@@ -1,6 +1,6 @@
 {
   "name": "@nelreina/rest-client",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "src/index.js",
   "type": "module",
   "files": [
@@ -12,7 +12,7 @@
     "dev:xml": "nodemon --watch src src/example/xml.js",
     "dev:jwt": "nodemon --watch src src/example/strapi-login.js",
     "dev:poll": "nodemon --watch src src/example/poll-for-value.js",
-    "dev": "run-p dev:json dev:xml dev:jwt"
+    "dev": "run-p dev:json dev:xml dev:jwt dev:poll"
   },
   "author": "@nelreina",
   "license": "ISC",

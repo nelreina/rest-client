@@ -23,7 +23,7 @@ const jsonService = new RestClient(
 ## Usage / Example
 
 ```javascript
-import { RestClient } from "@nelreina/rest-client";
+import RestClient from "@nelreina/rest-client";
 const jsonService = new RestClient("https://jsonplaceholder.typicode.com");
 const xmlService = new RestClient("http://localhost:1234", { mimetype: "xml" });
 

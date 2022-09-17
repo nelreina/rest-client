@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { RestClient } from "../index.js";
+import RestClient from "../index.js";
 const STRAPI_API = process.env["STRAPI_API"];
 const JWT_USERNAME = process.env["JWT_USERNAME"];
 const JWT_PASSWORD = process.env["JWT_PASSWORD"];

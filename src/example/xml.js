@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { RestClient } from "../index.js";
+import RestClient from "../index.js";
 const XML_API = process.env["XML_API"];
 
 try {

@@ -8,7 +8,7 @@ const continueCheckingValue = (data, field, values) => {
   return !("" + values).includes("" + data[field]);
 };
 
-export class RestClient {
+export default class RestClient {
   constructor(API, options = {}) {
     this.strapi = options.isStrapi || false;
     this.mime = options.mimetype || "json";

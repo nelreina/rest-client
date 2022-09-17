@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { RestClient } from "../index.js";
+import RestClient from "../index.js";
 const JSON_API = process.env["JSON_API"];
 console.log("LOG:  ~ file: json.js ~ line 5 ~ JSON_API", JSON_API);
 
