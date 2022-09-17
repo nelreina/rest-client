@@ -2,8 +2,13 @@ import axios from "axios";
 import { buildXML } from "@nelreina/xml-utils";
 
 const continueCheckingValue = (data, field, values) => {
-  if (values === "any" && (data[field] !== undefined || data[field] !== null)) {
-    return false;
+  let checkForNull = data[field] === undefined || data[field] === null;
+  if (values === "any") {
+    if (checkForNull) {
+      return true;
+    } else {
+      return false;
+    }
   }
   return !("" + values).includes("" + data[field]);
 };
