@@ -14,12 +14,15 @@ export default class RestClient {
     this.mime = options.mimetype || "json";
     this.headers = {
       baseURL: API,
-      auth: options.basicAuth || null,
       headers: {
         "Content-Type": `application/${this.mime}`,
         Accept: `application/${this.mime}`,
       },
     };
+    if (options.basicAuth) {
+      this.headers.auth = options.basicAuth;
+    }
+
     this.client = axios.create(this.headers);
   }
 
