@@ -12,8 +12,9 @@ export default class RestClient {
   constructor(API, options = {}) {
     this.strapi = options.isStrapi || false;
     this.mime = options.mimetype || "json";
+    this.api = API;
     this.headers = {
-      baseURL: API,
+      // baseURL: API,
       headers: {
         "Content-Type": `application/${this.mime}`,
         Accept: `application/${this.mime}`,
@@ -27,7 +28,7 @@ export default class RestClient {
   }
 
   async request(path, method = "GET", optionalData = null, token = false) {
-    const url = `${path}`;
+    const url = `${this.api}${path}`;
     const options = { method, url, headers: { ...this.headers } };
 
     if (this.strapi && token) {
