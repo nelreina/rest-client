@@ -17,13 +17,20 @@ export default class RestClient {
   constructor(API, options = {}) {
     this.strapi = options.isStrapi || false;
     this.mime = options.mimetype || "json";
+    this.base64 = options.base64 || false;
     this.api = API;
     this.headers = {
       "Content-Type": `application/${this.mime}`,
       Accept: `application/${this.mime}`,
     };
     if (options.basicAuth) {
-      this.headers.auth = options.basicAuth;
+      if (this.base64) {
+        let data = `${options.basicAuth.username}:${options.basicAuth.password}`;
+        let base64data = Buffer.fromString(data, "base64");
+        this.headers["Authorization"] = `Basic ${base64data}`;
+      } else {
+        this.headers.auth = options.basicAuth;
+      }
     }
 
     this.client = axios.create(this.headers);
