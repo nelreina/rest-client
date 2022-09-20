@@ -26,7 +26,7 @@ export default class RestClient {
     if (options.basicAuth) {
       if (this.base64) {
         let data = `${options.basicAuth.username}:${options.basicAuth.password}`;
-        let base64data = Buffer.from(data, "base64").toString();
+        let base64data = Buffer.from(data).toString("base64");
         this.headers["Authorization"] = `Basic ${base64data}`;
       } else {
         this.headers.auth = options.basicAuth;
