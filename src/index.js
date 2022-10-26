@@ -36,7 +36,13 @@ export default class RestClient {
     this.client = axios.create(this.headers);
   }
 
-  async request(path, method = "GET", optionalData = null, token = false) {
+  async request(
+    path,
+    method = "GET",
+    optionalData = null,
+    token = false,
+    responseObject = false
+  ) {
     const url = `${this.api}${path}`;
     const options = { method, url, headers: { ...this.headers } };
 
@@ -94,6 +100,9 @@ export default class RestClient {
     status = status ? status : response.status;
 
     if (status >= 200 && status < 210) {
+      if (responseObject) {
+        return response;
+      }
       return response.data;
     } else if (status === 400) {
       return badRequestData;
@@ -102,15 +111,15 @@ export default class RestClient {
     }
   }
 
-  async get(path, token) {
-    return await this.request(path, "GET", null, token);
+  async get(path, token, responseObject = false) {
+    return await this.request(path, "GET", null, token, responseObject);
   }
 
-  async post(path, data, token) {
-    return await this.request(path, "POST", data, token);
+  async post(path, data, token, responseObject = false) {
+    return await this.request(path, "POST", data, token, responseObject);
   }
-  async put(path, data, token) {
-    return await this.request(path, "PUT", data, token);
+  async put(path, data, token, responseObject = false) {
+    return await this.request(path, "PUT", data, token, responseObject);
   }
 
   async delete(path, token) {
