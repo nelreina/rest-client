@@ -9,6 +9,7 @@
   "scripts": {
     "dev:errors": "nodemon --watch src src/example/errors.js",
     "dev:json": "nodemon --watch src src/example/json.js",
+    "dev:headers": "nodemon --watch src src/example/headers.js",
     "dev:xml": "nodemon --watch src src/example/xml.js",
     "dev:jwt": "nodemon --watch src src/example/strapi-login.js",
     "dev:poll": "nodemon --watch src src/example/poll-for-value.js",

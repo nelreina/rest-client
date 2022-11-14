@@ -22,6 +22,7 @@ export default class RestClient {
     this.headers = {
       "Content-Type": `application/${this.mime}`,
       Accept: `application/${this.mime}`,
+      ...options.headers,
     };
     if (options.basicAuth) {
       if (this.base64) {
