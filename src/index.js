@@ -127,11 +127,14 @@ export default class RestClient {
     return await this.request(path, "DELETE", null, token);
   }
 
-  async strapiLogin(identifier, password) {
+  async strapiLogin(identifier, password, onlyToken = false) {
     try {
-      const { jwt } = await this.post("/auth/local", { identifier, password });
-      this.strapiToken = jwt;
-      return jwt;
+      const user = await this.post("/auth/local", { identifier, password });
+      this.strapiToken = user.jwt;
+      if (onlyToken) {
+        return user.jwt;
+      }
+      return user;
     } catch (error) {
       throw new Error(error);
     }
