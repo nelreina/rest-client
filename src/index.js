@@ -18,6 +18,7 @@ export default class RestClient {
     this.strapi = options.isStrapi || false;
     this.mime = options.mimetype || "json";
     this.base64 = options.base64 || false;
+    this.strapiToken = options.jwt || "";
     this.api = API;
     this.headers = {
       "Content-Type": `application/${this.mime}`,
